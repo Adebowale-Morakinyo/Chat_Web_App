@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>ChatRoom</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+<body>
+<h3>Demo chatroom</h3>
+    <div id="chat" style="width: 500px; height: 400px; border: 1px solid black; overflow-y: scroll;"></div>
+    <br>
+    <input type="text" id="inp_message" placeholder="Enter message" disabled>
+    <button type="submit" id="send" disabled>Send</button>
+    <p>Enter user name: </p> <input type="text" id="username" placeholder="Enter an username">
+    <button type="submit" id="connect">Connect</button>
+    <button type="submit" id="disconnect" disabled>Disconnect</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+        // getting and mapping the HTML elements and values
+        let chat = document.getElementById('chat');
+                let inp_message = document.getElementById('inp_message');
+                let send = document.getElementById('send');
+                let username = document.getElementById('username');
+                let btn_connect = document.getElementById('connect');
+                let btn_disconnect = document.getElementById('disconnect');
+                var user = username.value;
+                let socket = io("http://127.0.0.1:5000", {autoConnect: false});
+        // Connects to the socket if req are met, otherwise give a pop-up
+        btn_connect.onclick = function(){
+                    if(username.value != ""){
+                        socket.connect();
+                    }
+                    else{
+                        alert("Please enter a username!");
+                        console.log("Please enter a username!");
+                    }
+                };
+
+                socket.on('connect', function(){
+                    inp_message.disabled = false;
+                    send.disabled = false;
+                    username.disabled = true;
+                    btn_connect.disabled = true;
+                    user = username.value;
+                    socket.emit('notify', user + " has joined the chat!");
+                    btn_disconnect.disabled = false;
+        ptag = document.createElement('p');
+                    ptag.innerHTML = "You joined!";
+                    chat.appendChild(ptag);
+        console.log("Connected to server!");
+                });
+        socket.on('disconnect', function(){
+                    ptag = document.createElement('p');
+                    ptag.innerHTML = "You left!";
+                    chat.appendChild(ptag);
+        console.log('Disconnected to server!')
+                    inp_message.disabled = true;
+                    send.disabled = true;
+                    username.disabled = false;
+                    btn_connect.disabled = false;
+                    btn_disconnect.disabled = true
+                    socket.close();
+                });
+        socket.on('notify', function(status){
+                    ptag = document.createElement('p');
+                    ptag.innerHTML = status;
+                    chat.appendChild(ptag);
+                });
+        btn_disconnect.onclick = function(){
+                    socket.emit('notify', user + " has left the chat!");
+                    socket.close();
+                };
+        send.onclick = function(){
+                    socket.emit('data', "["+user+"]: " + inp_message.value);
+                    inp_message.value = "";
+                };
+        socket.on('returndata', function(data){
+                    ptag = document.createElement('p');
+                    ptag.innerHTML = data;
+                    chat.appendChild(ptag);
+                });
+    </script>
+</body>
+</html>
