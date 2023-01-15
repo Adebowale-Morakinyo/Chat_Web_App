@@ -4,7 +4,7 @@
 
 ## Setup
 
-Ensure you have python 3.6\8+ installed.
+Ensure you have python 3.8+ installed.
 
 ```bash
 pip install -r requirements.txt
@@ -24,3 +24,6 @@ Flask_cors used because of Werkzeug limitation issues.
 |<img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Home%20Page.PNG">  Home Page|  <img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Login%20Page%202.PNG" > Login Page|<img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Chatting%201.PNG"> Chatting(1)|
 |<img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Chatting%202.PNG"> Chatting(2)|  <img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Chatting%203.PNG"> Chatting(3)|<img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Chatting%204.PNG"> Chatting(4)|
 |<img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Logging%20out.PNG"> Logging Out|
+
+## Reference
+[UI Chat Idea](https://codepen.io/sajadhsm/pen/odaBdd), [Chat Avatar image](https://www.flaticon.com/free-icon/chat_4575970?term=avatar+chat&page=1&position=13&origin=search&related_id=4575970)

@@ -1,5 +1,7 @@
-from threading import Lock
+"""
+using in-memory list
+"""
 
 database = list()
-memory_access = Lock()
+
 
