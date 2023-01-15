@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}
+    Home page
+{% endblock %}
+{% block content %}
+
+  <main id="messages" class="msger-chat">
+
+  </main>
+
+  <form id="msgForm" class="msger-inputarea">
+    <input id="msg" type="text" class="msger-input" placeholder="Enter your message...">
+    <button type="submit" class="msger-send-btn" id=sendBtn>Send</button>
+  </form>
+
+{% endblock %}
+{% block script %}
+{% endblock %}

@@ -1,0 +1,3 @@
+Flask~=2.2.2
+flask-socketio
+flask_cors
