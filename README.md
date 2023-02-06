@@ -1,7 +1,13 @@
 # Chat_Web_App
 
 ### For development use, not production (simplifying development workflow)
+This code is a simple chat application that uses Flask, Flask-SocketIO, and Flask-CORS on the server side, and JavaScript, HTML, and CSS on the client side. The server side is responsible for handling the communication between clients, by using the WebSocket protocol provided by SocketIO. The clients use the browser's WebSocket API to communicate with the server.
 
+On the server side, a Flask app is created and a blueprint is registered for handling views. CORS is also set up to allow for cross-origin resource sharing. A SocketIO instance is then created, with the app and a wildcard origin. The server has one event handler that listens for a 'event' event, and when it receives one, it appends the message to a database and then emits the same message to all clients connected to the server.
+
+On the client side, the code uses JavaScript to create an asynchronous function that appends a message to the chat window. The function takes in an image, a message, and a side argument, which can be left or right. The function also uses the fetch API to load the user's name and previous messages from the server. The code also includes several utility functions for formatting dates and getting elements from the DOM.
+
+Finally, the client side code creates a WebSocket connection to the server using the socket.io library, and sets up event listeners for the 'connect' and 'disconnect' events, which are emitted by the server when a client connects or disconnects from the server. When the user submits a message, the message is sent to the server via the WebSocket connection.
 ## Setup
 
 Ensure you have python 3.8+ installed.

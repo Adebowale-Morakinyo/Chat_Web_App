@@ -1,4 +1,3 @@
-// const msgerChat = get(".msger-chat");
 async function appendMessage(img, msg, side="left") {
   if (typeof msg.name !== "undefined") {
     var time = formatDate(new Date())
