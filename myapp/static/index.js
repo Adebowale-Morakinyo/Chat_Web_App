@@ -15,19 +15,20 @@ async function appendMessage(img, msg, side="left") {
 
   //   Simple solution for small apps
   const msgHTML = `
-    <div class="msg ${side}-msg">
-      <div class="msg-img" style="background-image: url(${img})"></div>
+  <div class="msg ${side}-msg">
+    <div class="msg-img" style="background-image: url(${img})"></div>
 
-      <div class="msg-bubble">
-        <div class="msg-info">
-          <div class="msg-info-name">${msg.name}</div>
-          <div class="msg-info-time">${date}</div>
-        </div>
-
-        <div class="msg-text">${msg.message}</div>
+    <div class="msg-bubble">
+      <div class="msg-info">
+        <div class="msg-info-name ${side}-name">${msg.name}</div>
+        <div class="msg-info-time">${date}</div>
       </div>
+
+      <div class="msg-text">${msg.message}</div>
     </div>
-  `;
+  </div>
+`;
+
   var msgerChat = document.getElementById("messages");
 
   msgerChat.insertAdjacentHTML("beforeend", msgHTML);
@@ -76,6 +77,8 @@ socket.on("connect", async function () {
   if (usr_name != "") {
     socket.emit("event", {
       message: usr_name + " just connected to the server!",
+      name: usr_name,
+      date: formatDate(new Date()),
       connect: true,
     });
   }
@@ -105,7 +108,10 @@ socket.on("disconnect", async function (msg) {
   var usr_name = await load_name();
   socket.emit("event", {
     message: usr_name + " just left the server...",
+    name: usr_name,
+    date: formatDate(new Date())
   });
+  socket.disconnect();
 });
 socket.on("message response", function (msg) {
   appendMessage(PERSON_IMG, msg);

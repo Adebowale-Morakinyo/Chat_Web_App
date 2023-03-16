@@ -1,5 +1,8 @@
 from flask import Blueprint, render_template, request, url_for, redirect, session, flash, jsonify
-from test import database
+from myapp.database import db, Message
+
+from flask_login import logout_user, login_required
+from myapp import socket
 
 views = Blueprint('views', __name__, static_folder='static', template_folder='templates')
 
@@ -65,15 +68,19 @@ def get_messages():
     checking and cleaning duplicates because of in-memory list used
     :return: all messages
     """
-
-    messages = database
+    messages = db.session.query(Message).all()
 
     cleaned = set()
     clean_messages = []
-    for d in messages:
-        t = tuple(d.items())
-        if t not in cleaned:
-            cleaned.add(t)
-            clean_messages.append(d)
+    for message in messages:
+        if message not in cleaned:
+            cleaned.add(message)
+            clean_messages.append(message.to_dict())
 
     return jsonify(clean_messages)
+
+
+@views.route('/leave')
+def leave():
+    socket.emit('disconnect')
+    return redirect(url_for('views.logout'))

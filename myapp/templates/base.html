@@ -17,10 +17,8 @@
             <div class="msger-header-title">
                 <i class="fas fa-comment-alt"></i> ChatApp
             </div>
-            <div class="msger-header-options">
-                <span><i class="fas fa-cog" id="login"></i><a href="/login">login</a></span>
-                <span><i class="fas fa-cog" id="logout"></i><a href="/logout">logout</a></span>
-            </div>
+            {% block header_options%}
+            {% endblock %}
 
         </header>
         {% with messages = get_flashed_messages(with_categories=true) %}

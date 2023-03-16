@@ -1,26 +1,19 @@
-from flask import Flask, request
-from flask_socketio import SocketIO, emit
-from flask_cors import CORS
-from views import views
-from test import database
+from myapp import create_app
+from myapp.database import db, Message
+from flask import request
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = b'_5#y2L"F4Q8z\n\xec]/'
-app.register_blueprint(views, url_prefix='')
-CORS(app)
-socket = SocketIO(app, cors_allowed_origins="*")
+app, socket = create_app()
 
 
 # COMMUNICATION ARCHITECTURE
-
-@socket.on('connect')
-def connect():
-    print("[CLIENT CONNECTED]:", request.sid)
-
-
 @socket.on('disconnect')
-def disconn():
-    print("[CLIENT DISCONNECTED]:", request.sid)
+def handle_disconnect():
+    """
+    handles disconnection event
+    :return: None
+    """
+    print(f'{request.sid} disconnected')
+    socket.emit('disconnect', {'sid': request.sid}, broadcast=True)
 
 
 @socket.on('event')
@@ -33,12 +26,12 @@ def custom_event(json, methods=['GET', 'POST']):
     """
     data = dict(json)
     if 'name' in data:
-        database.append({'name': data['name'],
-                         'message': data['message'],
-                         'time': data['date']})
+        message = Message(name=data['name'], message=data['message'], time=data['date'])
+        db.session.add(message)
+        db.session.commit()
 
-    socket.emit('message response', json)
+    socket.emit('message response', json, broadcast=True)
 
 
 if __name__ == "__main__":
-    socket.run(app, allow_unsafe_werkzeug=True, debug=True)
+    socket.run(app, host="0.0.0.0", port=5000, allow_unsafe_werkzeug=True, debug=True)
