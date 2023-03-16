@@ -59,7 +59,7 @@ Flask_cors used because of Werkzeug limitation issues I had.
 | | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|
 |<img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Home%20Page.png">  Home Page|  <img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Login.png" > Login Page|<img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Chatting%201.PNG"> Chatting Window 1|
-|<img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Chatting%202.PNG"> Chatting Window 2|  <img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Chat%20Window.png"> Chatting Window 3|<img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/DataViz.png"> Data visualization Page|
+|<img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Chatting%203.PNG"> Chatting Window 2|  <img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Chat%20Window.png"> Chatting Window 3|<img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/DataViz.png"> Data visualization Page|
 
 ## Reference
 [UI Chat Idea](https://codepen.io/sajadhsm/pen/odaBdd), [Chat Avatar image](https://www.flaticon.com/free-icon/chat_4575970?term=avatar+chat&page=1&position=13&origin=search&related_id=4575970)
