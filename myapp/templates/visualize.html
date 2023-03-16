@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    DataViz page
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1>Data Visualization</h1>
+    <hr>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Messages by Hour</h5>
+            <img src="data:image/png;base64,{{ chart }}" class="img-fluid">
+            <a href="#" class="btn btn-primary mt-3" download="chart.png">Download Chart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

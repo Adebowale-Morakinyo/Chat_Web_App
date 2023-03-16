@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, url_for, redirect, session, flash, jsonify
 from myapp.database import db, Message
 
-from flask_login import logout_user, login_required
+import pandas as pd
+import matplotlib.pyplot as plt
 from myapp import socket
 
 views = Blueprint('views', __name__, static_folder='static', template_folder='templates')
@@ -9,7 +10,7 @@ views = Blueprint('views', __name__, static_folder='static', template_folder='te
 
 @views.route('/')
 @views.route('/home')
-def index():
+def home():
     """
     displays chat(home) window page, if logged in
     :return: None
@@ -18,7 +19,44 @@ def index():
     if 'username' not in session:
         return redirect(url_for('views.login'))
 
+    return render_template('home.html', **{'session': session})
+
+
+@views.route('/chat')
+def chat():
     return render_template('index.html', **{'session': session})
+
+
+@views.route('/visualize')
+def visualize():
+    # Query the database to get all the messages
+    messages = Message.query.all()
+
+    # Convert the messages to a pandas dataframe
+    df = pd.DataFrame([(msg.name, msg.message, msg.time) for msg in messages],
+                      columns=['Name', 'Message', 'Time'])
+
+    # Group the messages by hour
+    df['Time'] = pd.to_datetime(df['Time'], format='%H:%M')
+    df['Hour'] = pd.to_datetime(df['Time']).dt.hour
+    groupby_hour = df.groupby('Hour').count()['Name']
+
+    # Create a bar chart of the messages by hour
+    plt.bar(groupby_hour.index, groupby_hour.values)
+    plt.xlabel('Hour of Day')
+    plt.ylabel('Number of Messages')
+    plt.title('Messages by Hour')
+
+    # Convert the chart to base64 encoding to be displayed in the template
+    from io import BytesIO
+    import base64
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    chart = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    plt.close()
+
+    # Render the template with the chart
+    return render_template('visualize.html', chart=chart)
 
 
 @views.route('/login', methods=['GET', 'POST'])
@@ -33,7 +71,7 @@ def login():
         if len(username) >= 2:
             session['username'] = username
             flash(f'You logged in as {username}.', category='success')
-            return redirect(url_for('views.index'))
+            return redirect(url_for('views.home'))
         flash('Username must be more than one character!', category='danger')
 
     return render_template('login.html', **{'session': session})
@@ -83,4 +121,4 @@ def get_messages():
 @views.route('/leave')
 def leave():
     socket.emit('disconnect')
-    return redirect(url_for('views.logout'))
+    return redirect(url_for('views.home'))
