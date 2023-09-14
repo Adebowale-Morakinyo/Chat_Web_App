@@ -69,13 +69,16 @@ function formatDate(date) {
   return `${h.slice(-2)}:${m.slice(-2)}`;
 }
 
-var socket = io.connect("http://127.0.0.1:5000");
-var PERSON_IMG = "https://cdn-icons-png.flaticon.com/512/4575/4575970.png";
+// Create an object to encapsulate variables
+const chatApp = {
+    socket: io.connect("http://127.0.0.1:5000"),
+    PERSON_IMG: "https://cdn-icons-png.flaticon.com/512/4575/4575970.png"
+};
 
-socket.on("connect", async function () {
+chatApp.socket.on("connect", async function () {
   var usr_name = await load_name();
   if (usr_name != "") {
-    socket.emit("event", {
+    chatApp.socket.emit("event", {
       message: usr_name + " just connected to the server!",
       name: usr_name,
       date: formatDate(new Date()),
@@ -97,24 +100,26 @@ socket.on("connect", async function () {
     msg_input.value = "";
 
     // send message to other users
-    socket.emit("event", {
+    chatApp.socket.emit("event", {
       message: user_input,
       name: user_name,
       date: date
     });
   });
 });
-socket.on("disconnect", async function (msg) {
+
+chatApp.socket.on("disconnect", async function (msg) {
   var usr_name = await load_name();
-  socket.emit("event", {
+  chatApp.socket.emit("event", {
     message: usr_name + " just left the server...",
     name: usr_name,
     date: formatDate(new Date())
   });
-  socket.disconnect();
+  chatApp.socket.disconnect();
 });
-socket.on("message response", function (msg) {
-  appendMessage(PERSON_IMG, msg);
+
+chatApp.socket.on("message response", function (msg) {
+  appendMessage(chatApp.PERSON_IMG, msg);
 });
 
 window.onload = async function () {
@@ -130,4 +135,3 @@ window.onload = async function () {
     $("#logout").hide();
   }
 };
-
