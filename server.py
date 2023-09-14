@@ -35,7 +35,9 @@ def custom_event(json, methods=['GET', 'POST']):
             print(f"Error saving message to the database: {str(e)}")
             db.session.rollback()
 
-    socket.emit('message response', json, broadcast=True)
+    # Broadcast to all clients except the sender
+    room = request.sid
+    socket.emit('message response', json, room=room, include_self=False)
 
 
 if __name__ == "__main__":
