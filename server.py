@@ -26,9 +26,14 @@ def custom_event(json, methods=['GET', 'POST']):
     """
     data = dict(json)
     if 'name' in data:
-        message = Message(name=data['name'], message=data['message'], time=data['date'])
-        db.session.add(message)
-        db.session.commit()
+        try:
+            message = Message(name=data['name'], message=data['message'], time=data['date'])
+            db.session.add(message)
+            db.session.commit()
+        except Exception as e:
+            # Handle the database error, e.g., log the error or send an error response to the client.
+            print(f"Error saving message to the database: {str(e)}")
+            db.session.rollback()
 
     socket.emit('message response', json, broadcast=True)
 
