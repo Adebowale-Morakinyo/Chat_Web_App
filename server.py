@@ -4,7 +4,6 @@ from flask import request
 
 app, socket = create_app()
 
-
 # COMMUNICATION ARCHITECTURE
 @socket.on('disconnect')
 def handle_disconnect():
@@ -13,7 +12,12 @@ def handle_disconnect():
     :return: None
     """
     print(f'{request.sid} disconnected')
-    socket.emit('disconnect', {'sid': request.sid}, broadcast=True)
+
+    # Broadcast a message to all clients notifying about the disconnection
+    #socket.emit('message response', {'message': f'User {request.sid} left the chat'}, broadcast=True)
+
+    # Disconnect the client
+    socket.disconnect(request.sid)
 
 
 @socket.on('event')
