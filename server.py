@@ -19,7 +19,7 @@ def handle_disconnect():
 @socket.on('event')
 def custom_event(json, methods=['GET', 'POST']):
     """
-    handles saving messages and sending message to other clients
+    handles saving messages and sending messages to all clients
     :param json: json
     :param methods: POST GET
     :return: None
@@ -35,9 +35,8 @@ def custom_event(json, methods=['GET', 'POST']):
             print(f"Error saving message to the database: {str(e)}")
             db.session.rollback()
 
-    # Broadcast to all clients except the sender
-    room = request.sid
-    socket.emit('message response', json, room=room, include_self=False)
+    # Broadcast the message to all clients
+    socket.emit('message response', json, broadcast=True)
 
 
 if __name__ == "__main__":
