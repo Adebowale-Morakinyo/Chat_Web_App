@@ -108,15 +108,21 @@ chatApp.socket.on("connect", async function () {
   });
 });
 
-chatApp.socket.on("disconnect", async function (msg) {
+// Handle the leave link click event
+$("#leave-link").on("click", async function (e) {
+  e.preventDefault();
+
   var usr_name = await load_name();
   chatApp.socket.emit("event", {
     message: usr_name + " just left the server...",
     name: usr_name,
-    date: formatDate(new Date())
+    date: formatDate(new Date()),
   });
+
+  // Disconnect after emitting the message
   chatApp.socket.disconnect();
 });
+
 
 chatApp.socket.on("message response", function (msg) {
   appendMessage(chatApp.PERSON_IMG, msg);
