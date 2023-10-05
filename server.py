@@ -1,8 +1,10 @@
 from myapp import create_app
 from myapp.database import db, Message
 from flask import request
+from flask_socketio import emit, disconnect
 
 app, socket = create_app()
+
 
 # COMMUNICATION ARCHITECTURE
 @socket.on('disconnect')
@@ -14,10 +16,10 @@ def handle_disconnect():
     print(f'{request.sid} disconnected')
 
     # Broadcast a message to all clients notifying about the disconnection
-    #socket.emit('message response', {'message': f'User {request.sid} left the chat'}, broadcast=True)
+    # socket.emit('message response', {'message': f'User {request.sid} left the chat'}, broadcast=True)
 
     # Disconnect the client
-    socket.disconnect(request.sid)
+    disconnect(request.sid)
 
 
 @socket.on('event')
@@ -40,7 +42,7 @@ def custom_event(json, methods=['GET', 'POST']):
             db.session.rollback()
 
     # Broadcast the message to all clients
-    socket.emit('message response', json, broadcast=True)
+    emit('message response', json, broadcast=True)
 
 
 if __name__ == "__main__":
