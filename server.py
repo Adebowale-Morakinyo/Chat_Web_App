@@ -1,11 +1,13 @@
 from myapp import create_app
 from myapp.database import db, Message
 from flask import request
+from flask_socketio import emit, disconnect
 
 app, socket = create_app()
 
 
 # COMMUNICATION ARCHITECTURE
+
 @socket.on('disconnect')
 def handle_disconnect():
     """
@@ -13,24 +15,35 @@ def handle_disconnect():
     :return: None
     """
     print(f'{request.sid} disconnected')
-    socket.emit('disconnect', {'sid': request.sid}, broadcast=True)
+
+    # Broadcast a message to all clients notifying about the disconnection
+    # socket.emit('left_server', {'message': 'left the chat'}, broadcast=True)
+
+    # Disconnect the client
+    disconnect()
 
 
 @socket.on('event')
-def custom_event(json, methods=['GET', 'POST']):
+def handle_message(json, methods=['GET', 'POST']):
     """
-    handles saving messages and sending message to other clients
+    handles saving messages and sending messages to all clients
     :param json: json
     :param methods: POST GET
     :return: None
     """
     data = dict(json)
     if 'name' in data:
-        message = Message(name=data['name'], message=data['message'], time=data['date'])
-        db.session.add(message)
-        db.session.commit()
+        try:
+            message = Message(name=data['name'], message=data['message'], time=data['date'])
+            db.session.add(message)
+            db.session.commit()
+        except Exception as e:
+            # Handle the database error, e.g., log the error or send an error response to the client.
+            print(f"Error saving message to the database: {str(e)}")
+            db.session.rollback()
 
-    socket.emit('message response', json, broadcast=True)
+    # Broadcast the message to all clients
+    emit('message response', json, broadcast=True)
 
 
 if __name__ == "__main__":

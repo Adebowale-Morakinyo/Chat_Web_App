@@ -69,19 +69,24 @@ function formatDate(date) {
   return `${h.slice(-2)}:${m.slice(-2)}`;
 }
 
-var socket = io.connect("http://127.0.0.1:5000");
-var PERSON_IMG = "https://cdn-icons-png.flaticon.com/512/4575/4575970.png";
+// Create an object to encapsulate variables
+const chatApp = {
+  socket: io.connect("http://127.0.0.1:5000"),
+  PERSON_IMG: "https://cdn-icons-png.flaticon.com/512/4575/4575970.png",
+  initialConnectionHandled: false, // New property to track initial connection
+};
 
-socket.on("connect", async function () {
+chatApp.socket.on("connect", async function () {
   var usr_name = await load_name();
   if (usr_name != "") {
-    socket.emit("event", {
+    chatApp.socket.emit("event", {
       message: usr_name + " just connected to the server!",
       name: usr_name,
       date: formatDate(new Date()),
       connect: true,
     });
   }
+
   var form = $("form#msgForm").on("submit", async function (e) {
     e.preventDefault();
 
@@ -91,36 +96,55 @@ socket.on("connect", async function () {
     let user_name = await load_name();
 
     // add date
-    let date = formatDate(new Date())
+    let date = formatDate(new Date());
 
     // clear msg box value
     msg_input.value = "";
 
     // send message to other users
-    socket.emit("event", {
+    chatApp.socket.emit("event", {
       message: user_input,
       name: user_name,
-      date: date
+      date: date,
     });
   });
 });
-socket.on("disconnect", async function (msg) {
+
+// Handle the leave button click event
+$("#leave-btn").on("click", async function () {
+  // Get the username
   var usr_name = await load_name();
-  socket.emit("event", {
+
+  // Emit the "event" to notify that the user left the server
+  chatApp.socket.emit("event", {
     message: usr_name + " just left the server...",
     name: usr_name,
-    date: formatDate(new Date())
+    date: formatDate(new Date()),
   });
-  socket.disconnect();
+  console.log("disconnected");
+  // Disconnect cleanly
+  chatApp.socket.disconnect();
+
+  // Redirect to the home page
+  window.location.href = "/";  // Change this to the desired home page URL
 });
-socket.on("message response", function (msg) {
-  appendMessage(PERSON_IMG, msg);
+
+chatApp.socket.on("message response", function (msg) {
+  // Skip the initial connection message when processing other messages
+  if (chatApp.initialConnectionHandled && msg.message.includes("just connected to the server!")) {
+    return;
+  }
+  appendMessage(chatApp.PERSON_IMG, msg);
 });
 
 window.onload = async function () {
   var msgs = await load_messages();
   for (i = 0; i < msgs.length; i++) {
-    appendMessage(PERSON_IMG, msgs[i]);
+    // Skip the initial connection message when loading messages
+    if (!chatApp.initialConnectionHandled && msgs[i].message.includes("just connected to the server!")) {
+      continue;
+    }
+    appendMessage(chatApp.PERSON_IMG, msgs[i]);
   }
 
   let name = await load_name();
@@ -130,4 +154,3 @@ window.onload = async function () {
     $("#logout").hide();
   }
 };
-
