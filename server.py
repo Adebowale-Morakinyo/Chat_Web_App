@@ -17,7 +17,7 @@ def handle_disconnect():
     print(f'{request.sid} disconnected')
 
     # Broadcast a message to all clients notifying about the disconnection
-    # socket.emit('message response', {'message': f'User {request.sid} left the chat'}, broadcast=True)
+    # socket.emit('left_server', {'message': 'left the chat'}, broadcast=True)
 
     # Disconnect the client
     disconnect()

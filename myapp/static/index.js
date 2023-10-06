@@ -71,20 +71,29 @@ function formatDate(date) {
 
 // Create an object to encapsulate variables
 const chatApp = {
-    socket: io.connect("http://127.0.0.1:5000"),
-    PERSON_IMG: "https://cdn-icons-png.flaticon.com/512/4575/4575970.png"
+  socket: io.connect("http://127.0.0.1:5000"),
+  PERSON_IMG: "https://cdn-icons-png.flaticon.com/512/4575/4575970.png",
+  initialConnectionHandled: false, // New property to track initial connection
 };
 
 chatApp.socket.on("connect", async function () {
   var usr_name = await load_name();
   if (usr_name != "") {
-    chatApp.socket.emit("event", {
-      message: usr_name + " just connected to the server!",
-      name: usr_name,
-      date: formatDate(new Date()),
-      connect: true,
-    });
+    // Check if it's the initial connection message
+    if (!chatApp.initialConnectionHandled) {
+      // Mark the initial connection as handled
+      chatApp.initialConnectionHandled = true;
+    } else {
+      // Process other messages
+      chatApp.socket.emit("event", {
+        message: usr_name + " just connected to the server!",
+        name: usr_name,
+        date: formatDate(new Date()),
+        connect: true,
+      });
+    }
   }
+
   var form = $("form#msgForm").on("submit", async function (e) {
     e.preventDefault();
 
@@ -94,7 +103,7 @@ chatApp.socket.on("connect", async function () {
     let user_name = await load_name();
 
     // add date
-    let date = formatDate(new Date())
+    let date = formatDate(new Date());
 
     // clear msg box value
     msg_input.value = "";
@@ -103,34 +112,45 @@ chatApp.socket.on("connect", async function () {
     chatApp.socket.emit("event", {
       message: user_input,
       name: user_name,
-      date: date
+      date: date,
     });
   });
 });
 
-// Handle the leave link click event
-$("#leave-link").on("click", async function (e) {
-  e.preventDefault();
-
+// Handle the leave button click event
+$("#leave-btn").on("click", async function () {
+  // Get the username
   var usr_name = await load_name();
+
+  // Emit the "event" to notify that the user left the server
   chatApp.socket.emit("event", {
     message: usr_name + " just left the server...",
     name: usr_name,
     date: formatDate(new Date()),
   });
-
-  // Disconnect after emitting the message
+  console.log("disconnected");
+  // Disconnect cleanly
   chatApp.socket.disconnect();
+
+  // Redirect to the home page
+  window.location.href = "/";  // Change this to the desired home page URL
 });
 
-
 chatApp.socket.on("message response", function (msg) {
+  // Skip the initial connection message when processing other messages
+  if (!chatApp.initialConnectionHandled && msg.message.includes("just connected to the server!")) {
+    return;
+  }
   appendMessage(chatApp.PERSON_IMG, msg);
 });
 
 window.onload = async function () {
   var msgs = await load_messages();
   for (i = 0; i < msgs.length; i++) {
+    // Skip the initial connection message when loading messages
+    if (!chatApp.initialConnectionHandled && msgs[i].message.includes("just connected to the server!")) {
+      continue;
+    }
     appendMessage(chatApp.PERSON_IMG, msgs[i]);
   }
 
