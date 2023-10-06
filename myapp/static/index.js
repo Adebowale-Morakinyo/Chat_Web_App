@@ -78,7 +78,7 @@ const chatApp = {
 chatApp.socket.on("connect", async function () {
   var usr_name = await load_name();
   if (usr_name != "") {
-    chatApp.socket.emit("event", {
+    chatApp.socket.emit("notify", {
       message: usr_name + " just connected to the server!",
       name: usr_name,
       date: formatDate(new Date()),
@@ -113,7 +113,7 @@ $("#leave-link").on("click", async function (e) {
   e.preventDefault();
 
   var usr_name = await load_name();
-  chatApp.socket.emit("event", {
+  chatApp.socket.emit("notify", {
     message: usr_name + " just left the server...",
     name: usr_name,
     date: formatDate(new Date()),
@@ -131,7 +131,7 @@ chatApp.socket.on("message response", function (msg) {
 window.onload = async function () {
   var msgs = await load_messages();
   for (i = 0; i < msgs.length; i++) {
-    appendMessage(PERSON_IMG, msgs[i]);
+    appendMessage(chatApp.PERSON_IMG, msgs[i]);
   }
 
   let name = await load_name();

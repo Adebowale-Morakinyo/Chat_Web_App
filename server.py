@@ -7,6 +7,7 @@ app, socket = create_app()
 
 
 # COMMUNICATION ARCHITECTURE
+
 @socket.on('disconnect')
 def handle_disconnect():
     """
@@ -19,11 +20,11 @@ def handle_disconnect():
     # socket.emit('message response', {'message': f'User {request.sid} left the chat'}, broadcast=True)
 
     # Disconnect the client
-    disconnect(request.sid)
+    disconnect()
 
 
 @socket.on('event')
-def custom_event(json, methods=['GET', 'POST']):
+def handle_message(json, methods=['GET', 'POST']):
     """
     handles saving messages and sending messages to all clients
     :param json: json
@@ -40,6 +41,19 @@ def custom_event(json, methods=['GET', 'POST']):
             # Handle the database error, e.g., log the error or send an error response to the client.
             print(f"Error saving message to the database: {str(e)}")
             db.session.rollback()
+
+    # Broadcast the message to all clients
+    emit('message response', json, broadcast=True)
+
+
+@socket.on('notify')
+def notify_event(json, methods=['GET', 'POST']):
+    """
+    handles saving messages and sending messages to all clients
+    :param json: json
+    :param methods: POST GET
+    :return: None
+    """
 
     # Broadcast the message to all clients
     emit('message response', json, broadcast=True)
