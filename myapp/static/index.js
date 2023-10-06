@@ -79,19 +79,12 @@ const chatApp = {
 chatApp.socket.on("connect", async function () {
   var usr_name = await load_name();
   if (usr_name != "") {
-    // Check if it's the initial connection message
-    if (!chatApp.initialConnectionHandled) {
-      // Mark the initial connection as handled
-      chatApp.initialConnectionHandled = true;
-    } else {
-      // Process other messages
-      chatApp.socket.emit("event", {
-        message: usr_name + " just connected to the server!",
-        name: usr_name,
-        date: formatDate(new Date()),
-        connect: true,
-      });
-    }
+    chatApp.socket.emit("event", {
+      message: usr_name + " just connected to the server!",
+      name: usr_name,
+      date: formatDate(new Date()),
+      connect: true,
+    });
   }
 
   var form = $("form#msgForm").on("submit", async function (e) {
@@ -138,7 +131,7 @@ $("#leave-btn").on("click", async function () {
 
 chatApp.socket.on("message response", function (msg) {
   // Skip the initial connection message when processing other messages
-  if (!chatApp.initialConnectionHandled && msg.message.includes("just connected to the server!")) {
+  if (chatApp.initialConnectionHandled && msg.message.includes("just connected to the server!")) {
     return;
   }
   appendMessage(chatApp.PERSON_IMG, msg);
