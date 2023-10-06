@@ -78,7 +78,7 @@ const chatApp = {
 chatApp.socket.on("connect", async function () {
   var usr_name = await load_name();
   if (usr_name != "") {
-    chatApp.socket.emit("notify", {
+    chatApp.socket.emit("event", {
       message: usr_name + " just connected to the server!",
       name: usr_name,
       date: formatDate(new Date()),
@@ -113,7 +113,7 @@ $("#leave-link").on("click", async function (e) {
   e.preventDefault();
 
   var usr_name = await load_name();
-  chatApp.socket.emit("notify", {
+  chatApp.socket.emit("event", {
     message: usr_name + " just left the server...",
     name: usr_name,
     date: formatDate(new Date()),

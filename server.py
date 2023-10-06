@@ -46,18 +46,5 @@ def handle_message(json, methods=['GET', 'POST']):
     emit('message response', json, broadcast=True)
 
 
-@socket.on('notify')
-def notify_event(json, methods=['GET', 'POST']):
-    """
-    handles saving messages and sending messages to all clients
-    :param json: json
-    :param methods: POST GET
-    :return: None
-    """
-
-    # Broadcast the message to all clients
-    emit('message response', json, broadcast=True)
-
-
 if __name__ == "__main__":
     socket.run(app, host="0.0.0.0", port=5000, allow_unsafe_werkzeug=True, debug=True)
