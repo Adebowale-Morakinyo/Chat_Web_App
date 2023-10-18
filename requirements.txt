@@ -6,4 +6,4 @@ flask-sqlalchemy
 flask_login
 pandas
 matplotlib
-
+passlib
