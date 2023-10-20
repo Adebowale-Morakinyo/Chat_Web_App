@@ -1,7 +1,7 @@
 from myapp import create_app
 from myapp.database import db, Message
 from flask import request
-from flask_socketio import emit, disconnect
+from flask_socketio import emit, disconnect, join_room
 
 app, socket = create_app()
 
@@ -21,6 +21,19 @@ def handle_disconnect():
 
     # Disconnect the client
     disconnect()
+
+
+# Join-chat event. Emit online message to other users and join the room
+@socket.on("join-chat")
+def join_private_chat(data):
+    room = data["rid"]
+    join_room(room=room)
+    socket.emit(
+        "joined-chat",
+        {"msg": f"{room} is now online."},
+        room=room,
+        # include_self=False,
+    )
 
 
 @socket.on('event')
