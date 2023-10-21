@@ -1,27 +1,11 @@
 from myapp import create_app
 from myapp.database import db, Message
-from flask import request
-from flask_socketio import emit, disconnect, join_room
+from flask_socketio import emit, join_room, leave_room
 
 app, socket = create_app()
 
 
 # COMMUNICATION ARCHITECTURE
-
-@socket.on('disconnect')
-def handle_disconnect():
-    """
-    handles disconnection event
-    :return: None
-    """
-    print(f'{request.sid} disconnected')
-
-    # Broadcast a message to all clients notifying about the disconnection
-    # socket.emit('left_server', {'message': 'left the chat'}, broadcast=True)
-
-    # Disconnect the client
-    disconnect()
-
 
 # Join-chat event. Emit online message to other users and join the room
 @socket.on("join-chat")
@@ -36,27 +20,48 @@ def join_private_chat(data):
     )
 
 
-@socket.on('event')
-def handle_message(json, methods=['GET', 'POST']):
+# Outgoing event handler
+@socket.on("outgoing")
+def chatting_event(json, methods=["GET", "POST"]):
     """
     handles saving messages and sending messages to all clients
     :param json: json
     :param methods: POST GET
     :return: None
     """
-    data = dict(json)
-    if 'name' in data:
-        try:
-            message = Message(name=data['name'], message=data['message'], time=data['date'])
-            db.session.add(message)
-            db.session.commit()
-        except Exception as e:
-            # Handle the database error, e.g., log the error or send an error response to the client.
-            print(f"Error saving message to the database: {str(e)}")
-            db.session.rollback()
+    room_id = json["rid"]
+    timestamp = json["timestamp"]
+    message = json["message"]
+    sender_id = json["sender_id"]
+    sender_username = json["sender_username"]
 
-    # Broadcast the message to all clients
-    emit('message response', json, broadcast=True)
+    # Get the message entry for the chat room
+    chat_message = Message.query.filter_by(room_id=room_id).first()
+
+    # Add the new message to the conversation
+    updated_message = chat_message.conversation + [{
+        "timestamp": timestamp,
+        "sender_username": sender_username,
+        "sender_id": sender_id,
+        "message": message,
+    }]
+    chat_message.conversation = updated_message
+
+    # Updated the database with the new message
+    try:
+        chat_message.save_to_db()
+    except Exception as e:
+        # Handle the database error, e.g., log the error or send an error response to the client.
+        print(f"Error saving message to the database: {str(e)}")
+        db.session.rollback()
+
+    # Emit the message(s) sent to other users in the room
+    socket.emit(
+        "message",
+        json,
+        room=room_id,
+        include_self=False,
+    )
 
 
 if __name__ == "__main__":
