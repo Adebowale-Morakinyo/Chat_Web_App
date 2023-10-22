@@ -105,11 +105,7 @@
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"
-    integrity="sha512-eVL5Lb9al9FzgR63gDs1MxcDS2wFu3loYAgjIH0+Hg38tCS8Ag62dwKyH+wzDb+QauDpEZjXbMn11blw8cbTJQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
   <script type="text/javascript">
-
 
     // THIS FUNCTION SHOULD SCROLL DOWN AUTOMATICALLY
     //let scrollingElement = (document.scrollingElement || document.body)
@@ -136,7 +132,8 @@
       location.href = "#last_message";
       init();
     }
-    // YOUR SOCKET CODE
+
+    // SOCKET CODE
     var socket = io.connect('http://' + document.domain + ':' + location.port + '/?rid=' + {{ room_id }} );
     //scrollDown()
     socket.on('connect', function () {
@@ -144,9 +141,11 @@
         rid: '{{ room_id }}'
       })
     })
+
     socket.on('joined-chat', function (msg) {
       console.log(msg)
     })
+
     var form = $('#chat_form').on('submit', function (e) {
       e.preventDefault()
       let user_input = $('input.message').val()
@@ -170,6 +169,7 @@
     $('input.message').val('').focus()
     scrollDown();
         } )
+
     socket.on('message', function (msg) {
       $('div.msg_history').append(`<div class="incoming_msg">
               <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>

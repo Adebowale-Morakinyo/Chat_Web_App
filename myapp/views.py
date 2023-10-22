@@ -188,34 +188,13 @@ def ftime(date):
 
 @views.route('/visualize')
 def visualize():
-    # Query the database to get all the messages
-    messages = Message.query.all()
-
-    # Convert the messages to a pandas dataframe
-    df = pd.DataFrame([(msg.name, msg.message, msg.time) for msg in messages],
-                      columns=['Name', 'Message', 'Time'])
-
-    # Group the messages by hour
-    df['Time'] = pd.to_datetime(df['Time'], format='%H:%M')
-    df['Hour'] = pd.to_datetime(df['Time']).dt.hour
-    groupby_hour = df.groupby('Hour').count()['Name']
-
-    # Create a bar chart of the messages by hour
-    plt.bar(groupby_hour.index, groupby_hour.values)
-    plt.xlabel('Hour of Day')
-    plt.ylabel('Number of Messages')
-    plt.title('Messages by Hour')
-
-    # Convert the chart to base64 encoding to be displayed in the template
-    from io import BytesIO
-    import base64
-    buffer = BytesIO()
-    plt.savefig(buffer, format='png')
-    chart = base64.b64encode(buffer.getvalue()).decode('utf-8')
-    plt.close()
-
-    # Render the template with the chart
-    return render_template('visualize.html', chart=chart)
+    """
+    TODO: utilize pandas and matplotlib to analyze number of users registered to the app per our
+    ; create a chat of the analysis
+    ; Convert the chart to base64 encoding to be displayed in the template
+    ; render the template with the chart
+    """
+    pass
 
 
 @views.route('/get_name')
