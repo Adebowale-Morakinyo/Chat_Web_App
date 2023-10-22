@@ -23,12 +23,24 @@ def login_required(f):
 # Index route, this route redirects to login/register page
 @views.route("/", methods=["GET", "POST"])
 def index():
+    """
+    Redirects to the login/register page.
+
+    Returns:
+        Response: Flask response object.
+    """
     return redirect(url_for("views.login"))
 
 
 # Register a new user and hash password
 @views.route("/register", methods=["GET", "POST"])
 def register():
+    """
+    Handles user registration and password hashing.
+
+    Returns:
+        Response: Flask response object.
+    """
     if request.method == "POST":
         email = request.form["email"].strip().lower()
         username = request.form["username"].strip().lower()
@@ -59,6 +71,12 @@ def register():
 
 @views.route("/login", methods=["GET", "POST"])
 def login():
+    """
+    Handles user login and session creation.
+
+    Returns:
+        Response: Flask response object.
+    """
     if request.method == "POST":
         email = request.form["email"].strip().lower()
         password = request.form["password"]
@@ -84,6 +102,12 @@ def login():
 @views.route("/new-chat", methods=["POST"])
 @login_required
 def new_chat():
+    """
+    Creates a new chat room and adds users to the chat list.
+
+    Returns:
+        Response: Flask response object.
+    """
     user_id = session["user"]["id"]
     new_chat_email = request.form["email"].strip().lower()
 
@@ -138,6 +162,12 @@ def new_chat():
 @views.route("/chat/", methods=["GET", "POST"])
 @login_required
 def chat():
+    """
+    Renders the chat interface and displays chat messages.
+
+    Returns:
+        Response: Flask response object.
+    """
     # Get the room id in the URL or set to None
     room_id = request.args.get("rid", None)
 
@@ -189,10 +219,11 @@ def ftime(date):
 @views.route('/visualize')
 def visualize():
     """
-    TODO: utilize pandas and matplotlib to analyze number of users registered to the app per our
-    ; create a chat of the analysis
-    ; Convert the chart to base64 encoding to be displayed in the template
-    ; render the template with the chart
+    TODO: Utilize pandas and matplotlib to analyze the number of users registered to the app.
+    Create a chart of the analysis and convert it to base64 encoding for display in the template.
+
+    Returns:
+        Response: Flask response object.
     """
     pass
 
@@ -220,5 +251,11 @@ def get_messages():
 
 @views.route('/leave')
 def leave():
+    """
+    Emits a 'disconnect' event and redirects to the home page.
+
+    Returns:
+        Response: Flask response object.
+    """
     socket.emit('disconnect')
     return redirect(url_for('views.home'))
