@@ -5,9 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="06bd9495-cbd7-400c-b5ab-0f168d3972b5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/myapp/static/images/background.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/static/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/static/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Screenshot/Chat Window.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Screenshot/Chatting 1.PNG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Screenshot/Chatting 2.PNG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Screenshot/Chatting 3.PNG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Screenshot/Chatting 4.PNG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Screenshot/DataViz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Screenshot/Home Page.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Screenshot/Logging out.PNG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Screenshot/Login Page 2.PNG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Screenshot/Login.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +25,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -38,6 +46,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;feature-refinement&quot;,
