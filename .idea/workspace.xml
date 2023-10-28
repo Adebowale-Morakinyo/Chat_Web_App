@@ -5,16 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="06bd9495-cbd7-400c-b5ab-0f168d3972b5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Screenshot/Chat Window.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Chatting 1.PNG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Chatting 2.PNG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Chatting 3.PNG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Chatting 4.PNG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/DataViz.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Home Page.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Logging out.PNG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Login Page 2.PNG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Login.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myapp/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/server.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,16 +37,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature-refinement&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.tabs&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "feature-refinement",
+    "last_opened_file_path": "/home/adebowale/markt_python/app/views.py",
+    "settings.editor.selected.configurable": "editor.preferences.tabs"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="server" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Chat_Web_App" />
