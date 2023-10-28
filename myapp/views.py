@@ -152,7 +152,7 @@ def new_chat():
         recipient_chat.save_to_db()
 
         # Create a new message entry for the chat room
-        new_message = Message(room_id=room_id, conversation=[])
+        new_message = Message(room_id=room_id)
         db.session.add(new_message)
         db.session.commit()
 
@@ -185,21 +185,27 @@ def chat():
         is_active = room_id == chat["room_id"]
 
         try:
-            # Get the last message for each chat room
-            last_message = Message.query.filter_by(room_id=chat["room_id"]).first().conversation[-1]["message"]
+            # Get the Message object for the chat room
+            message = Message.query.filter_by(room_id=chat["room_id"]).first()
+
+            # Get the last ChatMessage object in the Message's messages relationship
+            last_message = message.messages[-1]
+
+            # Get the message content of the last ChatMessage object
+            last_message_content = last_message.content
         except (AttributeError, IndexError):
             # Set variable to this when no messages have been sent to the room
-            last_message = "This place is empty. No messages ..."
+            last_message_content = "This place is empty. No messages ..."
 
         data.append({
             "username": username,
             "room_id": chat["room_id"],
             "is_active": is_active,
-            "last_message": last_message,
+            "last_message": last_message_content,
         })
 
     # Get all the message history in a certain room
-    messages = Message.query.filter_by(room_id=room_id).first().conversation if room_id else []
+    messages = Message.query.filter_by(room_id=room_id).first().messages if room_id else []
 
     return render_template(
         "chat.html",
