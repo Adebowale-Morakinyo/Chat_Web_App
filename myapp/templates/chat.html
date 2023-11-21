@@ -65,7 +65,7 @@
               {% if j.sender_username==user_data["username"] %}
               <div class="outgoing_msg" id="{{ j.timestamp }}">
                 <div class="sent_msg">
-                  <p>{{ j.message }}</p>
+                  <p>{{ j.content }}</p>
                   <span class="time_date">{{ j.timestamp | ftime }}</span>
                 </div>
               </div>
@@ -75,7 +75,7 @@
                 </div>
                 <div class="received_msg">
                   <div class="received_withd_msg">
-                    <p>{{ j.message }}</p>
+                    <p>{{ j.content }}</p>
                     <span class="time_date">{{ j.timestamp | ftime }}</span>
                   </div>
                 </div>
