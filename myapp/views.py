@@ -219,7 +219,12 @@ def chat():
 # Custom time filter to be used in the jinja template
 @views.app_template_filter("ftime")
 def ftime(date):
-    return datetime.fromtimestamp(int(date)).strftime("%m.%d. %H:%M")
+    dt = datetime.fromtimestamp(int(date))
+    time_format = "%I:%M %p"  # Use  %I for 12-hour clock format and %p for AM/PM
+    formatted_time = dt.strftime(time_format)
+
+    formatted_time += " | " + dt.strftime("%m/%d")
+    return formatted_time
 
 
 @views.route('/visualize')
