@@ -62,25 +62,25 @@
         <div class="mesgs">
           <div class="msg_history">
             {% for j in messages %}
-            {% if j["sender_username"]==user_data["username"] %}
-            <div class="outgoing_msg" id="{{ j.timestamp }}">
-              <div class="sent_msg">
-                <p>{{ j["message"] }}</p>
-                <span class="time_date">{{ j["timestamp"] | ftime }}</span>
-              </div>
-            </div>
-            {% else %}
-            <div class="incoming_msg" id="{{ j.timestamp }}">
-              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
-              </div>
-              <div class="received_msg">
-                <div class="received_withd_msg">
-                  <p>{{ j["message"] }}</p>
-                  <span class="time_date">{{ j["timestamp"] | ftime }}</span>
+              {% if j.sender_username==user_data["username"] %}
+              <div class="outgoing_msg" id="{{ j.timestamp }}">
+                <div class="sent_msg">
+                  <p>{{ j.content }}</p>
+                  <span class="time_date">{{ j.timestamp | ftime }}</span>
                 </div>
               </div>
-            </div>
-            {% endif %}
+              {% else %}
+              <div class="incoming_msg" id="{{ j.timestamp }}">
+                <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
+                </div>
+                <div class="received_msg">
+                  <div class="received_withd_msg">
+                    <p>{{ j.content }}</p>
+                    <span class="time_date">{{ j.timestamp | ftime }}</span>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
             {% endfor %}
           </div>
           <div class="type_msg">
@@ -151,7 +151,7 @@
       let user_input = $('input.message').val()
 
       socket.emit('outgoing', {
-        timestamp: Date.now() / 1000,
+        timestamp: parseInt(Date.now()/1000),
         sender_username: "{{ user_data['username'] }}",
         sender_id: {{ user_data["id"] }},
         message : user_input,
@@ -188,6 +188,15 @@
     function formatDate(date) {
       // Get the hours, minutes, and seconds from the Date object.
       const hours = date.getHours();
+      let formattedHours;
+
+      if (hours > 12) {
+          formattedHours = hours - 12;
+      } else if(hours === 0) {
+          formattedHours = 12;
+      } else {
+          formattedHours = hours;
+      }
       const minutes = date.getMinutes();
       //const seconds = date.getSeconds();
 
@@ -196,7 +205,7 @@
       const day = date.getDate();
 
       // Create a string with the desired time format.
-      const timeFormat = `${hours}:${minutes} ${(hours >= 12) ? 'PM' : 'AM'} | ${month}/${day}`;
+      const timeFormat = `${formattedHours}:${minutes} ${(hours >= 12) ? 'PM' : 'AM'} | ${month}/${day}`;
 
       // Return the time format string.
       return timeFormat;

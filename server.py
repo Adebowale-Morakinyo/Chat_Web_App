@@ -1,5 +1,5 @@
 from myapp import create_app
-from myapp.database import db, Message
+from myapp.database import db, Message, ChatMessage
 from flask_socketio import emit, join_room, leave_room
 
 app, socket = create_app()
@@ -36,20 +36,23 @@ def chatting_event(json, methods=["GET", "POST"]):
     sender_username = json["sender_username"]
 
     # Get the message entry for the chat room
-    chat_message = Message.query.filter_by(room_id=room_id).first()
+    message_entry = Message.query.filter_by(room_id=room_id).first()
 
     # Add the new message to the conversation
-    updated_message = chat_message.conversation + [{
-        "timestamp": timestamp,
-        "sender_username": sender_username,
-        "sender_id": sender_id,
-        "message": message,
-    }]
-    chat_message.conversation = updated_message
+    chat_message = ChatMessage(
+        content=message,
+        timestamp=timestamp,
+        sender_id=sender_id,
+        sender_username=sender_username,
+        room_id=room_id,
+    )
+    # Add the new chat message to the messages relationship of the message
+    message_entry.messages.append(chat_message)
 
     # Updated the database with the new message
     try:
         chat_message.save_to_db()
+        message_entry.save_to_db()
     except Exception as e:
         # Handle the database error, e.g., log the error or send an error response to the client.
         print(f"Error saving message to the database: {str(e)}")

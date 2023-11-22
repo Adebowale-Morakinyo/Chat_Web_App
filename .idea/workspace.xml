@@ -5,16 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="06bd9495-cbd7-400c-b5ab-0f168d3972b5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Screenshot/Chat Window.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Chatting 1.PNG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Chatting 2.PNG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Chatting 3.PNG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Chatting 4.PNG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/DataViz.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Home Page.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Logging out.PNG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Login Page 2.PNG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Screenshot/Login.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,8 +16,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -50,6 +42,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;feature-refinement&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/adebowale/markt_python/app/views.py&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.tabs&quot;
   }
 }</component>
