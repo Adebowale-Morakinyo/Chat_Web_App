@@ -60,6 +60,11 @@ To run the iChat web application locally, follow these steps:
    ```bash
    python server.py
    ```
+   or 
+   ```bash
+   gunicorn -c gunicorn_config.py server:app
+   ```
+
 
 Visit `http://localhost:5000` in your web browser to access iChat.
 
@@ -91,7 +96,7 @@ Blueprint for route views, including login, registration, chat, and visualizatio
 
 ### `gunicorn_config.py`
 
-Gunicorn configuration file for deployment settings.
+Gunicorn's configuration file for deployment settings.
 
 ### `server.py`
 
