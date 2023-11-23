@@ -1,65 +1,118 @@
-# Chat Web App
+# iChat Web Application
 
-This is a simple chat web application built with Flask, Socket.IO, and SQLAlchemy.
+iChat is a real-time web chat application built with Flask and Socket.IO. It provides a seamless and interactive platform for users to communicate with each other through individual chat rooms.
 
 ## Project Structure
 
-The project has the following file structure:
+```
+Chat_Web_App/
+    myapp/
+        static/
+            images/
+            auth.css
+            chat.css
+            index.js
+            styles.css
+        templates/
+            auth.html
+            base.html
+            chat.html
+            visualize.html
+        __init__.py
+        config.py
+        database.py
+        views.py
+    .gitignore
+    gunicorn_config.py
+    README.md
+    requirements.txt
+    server.py
+```
 
+## Getting Started
 
-- `myapp/`: This directory contains the Flask application.
-- `static/`: This directory contains static files, such as JavaScript and CSS.
-- `templates/`: This directory contains HTML templates used by Flask to generate the web pages.
-- `__init__.py`: Initializes the Flask application, SQLAlchemy, and Socket.IO.
-- `config.py`: Contains the configuration settings for the Flask application.
-- `database.py`: Defines the database schema using SQLAlchemy.
-- `views.py`: Contains the Flask views and Socket.IO events that define the application's behavior.
-- `server.py`: Runs the Flask application.
-- `requirements.txt`: Lists the Python dependencies required to run the project.
+To run the iChat web application locally, follow these steps:
 
-## Running the Application
+1. Clone the repository:
 
-To run the application, follow these steps:
+   ```bash
+   git clone https://github.com/your-username/Chat_Web_App.git
+   ```
 
-1. Install the required Python dependencies by running `pip install -r requirements.txt`.
-2. Start the Flask application by running `python server.py`.
-3. Open your web browser and navigate to `http://localhost:5000`.
+2. Install the required dependencies:
 
-## Functionality
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-The chat application allows users to join a chat room and send messages to each other in real-time. The application also stores messages in a SQLite database using SQLAlchemy. Users can leave the chat room at any time using the "Leave" button in the navigation bar.
+3. Set up the environment variables:
 
-## Future Enhancements
+   - Create a `.env` file in the project root.
+   - Add the following lines to the `.env` file:
 
-In the future, we plan to add the following enhancements:
+     ```env
+     SECRET_KEY=your_secret_key_here
+     DATABASE_URL=sqlite:///database.db
+     ```
 
-- A homepage that includes a link to the chat room, as well as links to data visualizations built using the Pandas library.
-- Data visualizations that show real-time statistics about the chat room, such as the number of active users and the frequency of messages.
-- A user registration system that allows users to create accounts and login to the chat room with their username and password.
-- Support for sending images and files in addition to text messages.
+4. Run the server:
 
-## Credits
+   ```bash
+   python server.py
+   ```
 
-This project was created by Adebowale Ifeoluwa (Me!).
+Visit `http://localhost:5000` in your web browser to access iChat.
 
+## Features
 
-### For development use, not production (simplifying development workflow)
-This code is a simple chat application that uses Flask, Flask-SocketIO, and Flask-CORS on the server side, and JavaScript, HTML, and CSS on the client side. The server side is responsible for handling the communication between clients, by using the WebSocket protocol provided by SocketIO. The clients use the browser's WebSocket API to communicate with the server.
+- **User Authentication:** Secure user registration and login with password hashing.
+- **Real-time Chat:** Instant messaging in individual chat rooms.
+- **Dynamic Chat List:** Automatically updates the chat list with new messages.
+- **Responsive Design:** Works seamlessly on desktop and mobile devices.
+- **Visualize User Registration Trends** Visualize the user registration data using Pandas and Matplotlib. This feature aims to analyze the number of users registered on the app over time and present the findings in a graphical format.
 
-On the server side, a Flask app is created and a blueprint is registered for handling views. CORS is also set up to allow for cross-origin resource sharing. A SocketIO instance is then created, with the app and a wildcard origin. The server has one event handler that listens for a 'event' event, and when it receives one, it appends the message to a database and then emits the same message to all clients connected to the server.
+## Project Architecture
 
-On the client side, the code uses JavaScript to create an asynchronous function that appends a message to the chat window. The function takes in an image, a message, and a side argument, which can be left or right. The function also uses the fetch API to load the user's name and previous messages from the server. The code also includes several utility functions for formatting dates and getting elements from the DOM.
+### `__init__.py`
 
-Finally, the client side code creates a WebSocket connection to the server using the socket.io library, and sets up event listeners for the 'connect' and 'disconnect' events, which are emitted by the server when a client connects or disconnects from the server. When the user submits a message, the message is sent to the server via the WebSocket connection.
-#
+Initialization of the Flask application, configuration, and extension setup.
 
-Flask_cors used because of Werkzeug limitation issues I had.
+### `config.py`
 
-## Screenshot
-| | | |
-|:-------------------------:|:-------------------------:|:-------------------------:|
-|<img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Home%20Page.png">  Home Page|  <img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Login.png" > Login Page|<img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Chatting%201.PNG"> Chatting Window 1|
-|<img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Chatting%203.PNG"> Chatting Window 2|  <img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/Chat%20Window.png"> Chatting Window 3|<img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/DataViz.png"> Data visualization Page|
+Configuration settings for the Flask application, including the secret key and database URI.
 
-## Reference
-[UI Chat Idea](https://codepen.io/sajadhsm/pen/odaBdd), [Chat Avatar image](https://www.flaticon.com/free-icon/chat_4575970?term=avatar+chat&page=1&position=13&origin=search&related_id=4575970)
+### `database.py`
+
+Database models and schema definition using SQLAlchemy. Includes user, chat, and message models.
+
+### `views.py`
+
+Blueprint for route views, including login, registration, chat, and visualization routes.
+
+### `gunicorn_config.py`
+
+Gunicorn configuration file for deployment settings.
+
+### `server.py`
+
+Entry point for running the server. Initializes the Flask application and Socket.IO communication events.
+
+## ⛏️ Built With <a name = "tech_stack"></a>
+
+<img alt="Flask" src="https://img.shields.io/badge/flask-%23000.svg?&style=for-the-badge&logo=flask&logoColor=white"/><img alt="HTML5" src="https://img.shields.io/badge/html5-%23E34F26.svg?&style=for-the-badge&logo=html5&logoColor=white"/><img alt="CSS3" src="https://img.shields.io/badge/css3-%231572B6.svg?&style=for-the-badge&logo=css3&logoColor=white"/><img alt="JavaScript" src="https://img.shields.io/badge/javascript-%23323330.svg?&style=for-the-badge&logo=javascript&logoColor=%23F7DF1E"/><img alt="Bootstrap" src="https://img.shields.io/badge/bootstrap-%23563D7C.svg?&style=for-the-badge&logo=bootstrap&logoColor=white"/><img alt="FlaskSqlalchemy" src ="https://img.shields.io/badge/FlaskSQLalchemy-%2307405e.svg?&style=for-the-badge&logo=sqlite&logoColor=white"/>
+
+## 🤳 Screenshots <a name = "screenshots"></a>
+|                                                                                                                                   |                                                                                                                                   |                                                                                                                                              |
+|:---------------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------------------------------------:|
+|  <img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/register_login.png">  Register   |      <img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/login_page.png" > Login      | <img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/new_chat.png"> Add other users (Chat Window) |
+| <img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/chatting_1.png"> (Chat Window _A) | <img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/chatting_2.png"> (Chat Window _B) |      <img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/chatting_3.png"> (Chat Window _C)       |
+| <img width="1604" src="https://github.com/Adebowale-Morakinyo/Chat_Web_App/blob/main/Screenshot/chatting_4.png"> (Chat Window _D) |
+
+## Contributing
+
+Contributions are welcome! If you'd like to contribute to iChat, please follow the [contribution guidelines](CONTRIBUTING.md).
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Window</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="/static/chat.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
+    rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="container-header">
+      <h3 class=" text-left"> {{ user_data["username"] }}</h3>
+      <h3 class=" text-center">iChat</h3>
+      <h3 class=" text-right">{{ user_data["email"] }}</h3>
+    </div>
+    <div class="messaging">
+      <div class="inbox_msg">
+        <div class="inbox_people">
+          <div class="headind_srch">
+            <div class="recent_heading">
+              <h4>Recent</h4>
+            </div>
+            <div class="srch_bar">
+              <div class="stylish-input-group">
+                <input type="text" class="search-bar" placeholder="Search">
+                <span class="input-group-addon">
+                  <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+                </span>
+              </div>
+            </div>
+            <div class="new_chat">
+              <div id="new_chat_overlay"></div>
+              <button id="new_chat_btn"><i class="fa fa-plus"></i> New Chat</button>
+              <form method="POST" action="{{ url_for('views.new_chat') }}" id="new_chat_form">
+                <label for="email"><strong>Email: </strong></label>
+                <input type="email" name="email" placeholder="enter friend's email here...">
+                <input type="submit" value="Submit">
+              </form>
+            </div>
+          </div>
+          <div class="inbox_chat">
+            {% for i in data %}
+            <a href="{{ url_for('views.chat',rid=i.room_id) }}">
+              <div class="chat_list" id="{{ i.room_id }}">
+                <div class="chat_people">
+                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                  <div class="chat_ib">
+                    <h5>{{ i["username"] }}</h5>
+                    <p id="last-message">{{ i["last_message"] }}</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="mesgs">
+          <div class="msg_history">
+            {% for j in messages %}
+              {% if j.sender_username==user_data["username"] %}
+              <div class="outgoing_msg" id="{{ j.timestamp }}">
+                <div class="sent_msg">
+                  <p>{{ j.content }}</p>
+                  <span class="time_date">{{ j.timestamp | ftime }}</span>
+                </div>
+              </div>
+              {% else %}
+              <div class="incoming_msg" id="{{ j.timestamp }}">
+                <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
+                </div>
+                <div class="received_msg">
+                  <div class="received_withd_msg">
+                    <p>{{ j.content }}</p>
+                    <span class="time_date">{{ j.timestamp | ftime }}</span>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="type_msg">
+            <div class="input_msg_write">
+              <form id="chat_form">
+                <input type="text" class="message" placeholder="Type a message" />
+                <button class="msg_send_btn" type="submit">
+                  <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                </button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <p class="text-center top_spac"> Design by
+        <a target="_blank" href="https://www.linkedin.com/in/sunil-rajput-nattho-singh/">Sunil Rajput</a>
+      </p>
+    </div>
+  </div>
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+  <script type="text/javascript">
+
+    // THIS FUNCTION SHOULD SCROLL DOWN AUTOMATICALLY
+    //let scrollingElement = (document.scrollingElement || document.body)
+    let msgH = document.querySelectorAll(".msg_history > div"), CurrentLen;
+    let init = () => {
+      CurrentLen = msgH.length;
+    }
+    init();
+    let validatePosition = () => {
+      if (msgH.length === CurrentLen) {
+        msgH[msgH.length - 1].setAttribute("id", "last_message");
+        for (var i; i < msgH.length; i++) {
+          if (msgH[i].id === "last_message" && msgH[i] !== msgH.length - 1) {
+            msgH[i].removeAttribute("id");
+            msgH[msgH.length - 1].setAttribute("id", "last_message");
+          }
+        }
+      }
+    }
+    let scrollDown = () => {
+      //scrollingElement.scrollTop = scrollingElement.scrollHeight;
+      //$container.animate({scrollTop: $container[0].scrollHeight }, "slow");
+      validatePosition();
+      location.href = "#last_message";
+      init();
+    }
+
+    // SOCKET CODE
+    var socket = io.connect('http://' + document.domain + ':' + location.port + '/?rid=' + {{ room_id }} );
+    //scrollDown()
+    socket.on('connect', function () {
+      socket.emit('join-chat', {
+        rid: '{{ room_id }}'
+      })
+    })
+
+    socket.on('joined-chat', function (msg) {
+      console.log(msg)
+    })
+
+    var form = $('#chat_form').on('submit', function (e) {
+      e.preventDefault()
+      let user_input = $('input.message').val()
+
+      socket.emit('outgoing', {
+        timestamp: parseInt(Date.now()/1000),
+        sender_username: "{{ user_data['username'] }}",
+        sender_id: {{ user_data["id"] }},
+        message : user_input,
+        rid: '{{ room_id }}'
+        } )
+    //scrollDown();
+    $('div.msg_history').append(`
+            <div class="outgoing_msg">
+              <div class="sent_msg">
+                <p>${user_input}</p>
+                <span class="time_date"> ${formatDate(new Date())}</span> </div>
+            </div>
+          `)
+    document.getElementById("last-message").innerHTML = user_input
+    $('input.message').val('').focus()
+    scrollDown();
+        } )
+
+    socket.on('message', function (msg) {
+      $('div.msg_history').append(`<div class="incoming_msg">
+              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+              <div class="received_msg">
+                <div class="received_withd_msg">
+                  <p>${msg.message}</p>
+                  <span class="time_date"> ${formatDate(new Date())}</span></div>
+              </div>
+            </div>`)
+      scrollDown();
+      document.getElementById("last-message").innerHTML = msg.message
+    })
+
+  </script>
+  <script>
+    function formatDate(date) {
+      // Get the hours, minutes, and seconds from the Date object.
+      const hours = date.getHours();
+      let formattedHours;
+
+      if (hours > 12) {
+          formattedHours = hours - 12;
+      } else if(hours === 0) {
+          formattedHours = 12;
+      } else {
+          formattedHours = hours;
+      }
+      const minutes = date.getMinutes();
+      //const seconds = date.getSeconds();
+
+      // Get the month and day from the Date object.
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+
+      // Create a string with the desired time format.
+      const timeFormat = `${formattedHours}:${minutes} ${(hours >= 12) ? 'PM' : 'AM'} | ${month}/${day}`;
+
+      // Return the time format string.
+      return timeFormat;
+    }
+ </script>
+
+  <script>
+    window.onload = function () {
+      let newChatBtn = document.querySelector('#new_chat_btn');
+      let newChatForm = document.querySelector('#new_chat_form');
+      let newChatoverlay = document.querySelector('#new_chat_overlay');
+      newChatBtn.onclick = (e) => {
+        if (e.target === newChatBtn) {
+          newChatForm.style.display = "block";
+          newChatoverlay.style.display = 'block';
+
+        }
+      }
+      newChatoverlay.onclick = (e) => {
+        if (e.target === newChatoverlay) {
+          newChatForm.style.display = "none";
+          newChatoverlay.style.display = 'none';
+        }
+      }
+    }
+  </script>
+</body>
+</html>
